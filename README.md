@@ -13,5 +13,9 @@ I run it using [Nix](https://nixos.org/) like so:
 $ nix-shell -p ruby --command "bundle install && bundle exec ruby main.rb"
 ```
 
+This software is in the public domain.
+
+That's right, do whatever.
+
 Let's all love lain.
 
