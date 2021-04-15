@@ -1,0 +1,96 @@
+# frozen_string_literals: true
+
+#
+# saybot -- emit speech from macOS' TTS system in IRC
+#
+# This software is in the public domain.
+#
+
+require "cinch"
+require "tempfile"
+require "json"
+
+require "http"
+require "dotenv/load"
+
+CMD_REGEX = Regexp.new(/^\.say (-v (\S+) )?(.*)$/).freeze
+VOICES = ENV["SAYBOT_ALLOWED_VOICES"].split(" ")
+
+def make_speech_sample(text, voice="whisper")
+  outfile = Tempfile.new(["saybot", ".aiff"])
+
+  IO.popen(["say", "-o", outfile.path, "-v", voice, text]) do |p|
+    p.read
+  end
+
+  return outfile
+end
+
+def convert_to_ogg(infile)
+  outfile = Tempfile.new(["saybot", ".ogg"])
+
+  IO.popen(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-i", infile.path, outfile.path]) do |p|
+    p.read
+  end
+
+  return outfile
+end
+
+def pomf(infile)
+  response = HTTP.post(ENV["SAYBOT_POMF_UPLOAD_URL"], form: {
+    "files[]" => [HTTP::FormData::File.new(infile)]
+  })
+  response = response.to_s
+  response = JSON.parse(response)
+
+  if !response["success"]
+    raise response
+  end
+
+  return response["files"][0]["url"]
+end
+
+def main
+  bot = Cinch::Bot.new do
+    configure do |c|
+      c.nick = ENV["SAYBOT_NICK"]
+      c.realname = ENV["SAYBOT_REALNAME"]
+      c.user = ENV["SAYBOT_USER"]
+
+      c.server = ENV["SAYBOT_HOST"]
+      c.port = ENV["SAYBOT_PORT"]
+      c.password = ENV["SAYBOT_PASSWORD"]
+      c.channels = ENV["SAYBOT_CHANNELS"].split(" ")
+      c.ssl.use = ENV["SAYBOT_SSL"].downcase == "true"
+    end
+
+    on :message, '.bots' do |m|
+      m.target.notice("I let you .say things using macOS' text-to-speech system; run by Flisk")
+    end
+
+    on :message, '.source' do |m|
+      m.target.notice("https://github.com/Flisk/saybot")
+    end
+  
+    on :message, /^.say / do |m|
+      if match = CMD_REGEX.match(m.message)
+        voice = match[2] || "whisper"
+        text = match[3]
+
+        aiff = make_speech_sample(text, voice)
+        ogg = convert_to_ogg(aiff)
+        aiff.close
+
+        url = pomf(ogg)
+        ogg.close
+
+        m.target.notice(url)
+      end
+    end
+  end
+  
+  bot.start
+end
+
+main
+
