@@ -7,6 +7,8 @@ you'd better know Ruby and get your hands dirty, and just to be perfectly
 clear, this requires macOS (or a compatible implementation of `say`, which to
 my knowledge doesn't exist).
 
+You will have to copy `.env.sample` to `.env` and edit it appropriately.
+
 I run it using [Nix](https://nixos.org/) like so:
 
 ```sh
