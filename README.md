@@ -12,7 +12,7 @@ You will have to copy `.env.sample` to `.env` and edit it appropriately.
 I run it using [Nix](https://nixos.org/) like so:
 
 ```sh
-$ nix-shell -p ruby --command "bundle install && bundle exec ruby main.rb"
+$ nix-shell -p ruby ffmpeg --command "bundle install && bundle exec ruby main.rb"
 ```
 
 This software is in the public domain.
