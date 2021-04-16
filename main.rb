@@ -19,8 +19,9 @@ VOICES = ENV['SAYBOT_ALLOWED_VOICES'].split(' ')
 def make_speech_sample(text, voice='whisper')
   outfile = Tempfile.new(['saybot', '.aiff'])
 
-  IO.popen(['say', '-o', outfile.path, '-v', voice, text]) do |p|
-    p.read
+  IO.popen(['say', '-f', '-', '-o', outfile.path, "-v#{voice}"], 'w') do |p|
+    p.puts text
+    p.close_write
   end
 
   return outfile
