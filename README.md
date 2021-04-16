@@ -15,9 +15,36 @@ I run it using [Nix](https://nixos.org/) like so:
 $ nix-shell -p ruby ffmpeg --command "bundle install && bundle exec ruby main.rb"
 ```
 
+## Usage
+
+`.say Your text here.`
+
+`.say -v bells Ding dong, ding dong.`
+
+## Voices
+
+Here's a short (non-exhaustive) reference of available voices:
+
+* albert
+* bahh
+* bells
+* boing
+* bubbles
+* cellos
+* deranged
+* hysterical
+* trinoids
+* whisper
+* zarvox
+
+These are basically almost all the novelty voices available. Others may also
+work.
+
+## Copyright
+
 This software is in the public domain.
 
 That's right, do whatever.
 
-Let's all love lain.
+Let's all love Lain.
 

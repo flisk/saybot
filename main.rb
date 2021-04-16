@@ -14,7 +14,6 @@ require 'http'
 require 'dotenv/load'
 
 CMD_REGEX = Regexp.new(/^\.say (-v (\S+) )?(.*)$/).freeze
-VOICES = ENV['SAYBOT_ALLOWED_VOICES'].split(' ')
 
 def make_speech_sample(text, voice='whisper')
   outfile = Tempfile.new(['saybot', '.aiff'])
