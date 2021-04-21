@@ -99,9 +99,11 @@ def main
         aiff = make_speech_sample(text, voice)
         ogg = convert_to_ogg(aiff)
         aiff.close
+        aiff.unlink
 
         url = pomf(ogg)
         ogg.close
+        ogg.unlink
 
         m.target.notice("#{m.user.nick}: #{url}")
       end
