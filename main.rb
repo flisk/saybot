@@ -48,7 +48,23 @@ def pomf(infile)
   return response['files'][0]['url']
 end
 
+def ensure_env_file_permissions!
+  unless (File.stat('.env').mode & 0o077) == 0
+    $stderr.write <<~err
+
+      Your .env file is unprotected! Please adjust its permissions, e.g.:
+      $ chmod 600 .env
+
+      Refusing to run until this is resolved.
+
+    err
+    exit 1
+  end
+end
+
 def main
+  ensure_env_file_permissions!
+
   bot = Cinch::Bot.new do
     configure do |c|
       c.nick = ENV['SAYBOT_NICK']
