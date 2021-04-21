@@ -62,6 +62,11 @@ def main
       c.password = ENV['SAYBOT_PASSWORD']
       c.channels = ENV['SAYBOT_CHANNELS'].split(' ')
       c.ssl.use = ENV['SAYBOT_SSL'].downcase == 'true'
+
+      if ENV.include?('SAYBOT_SASL_USERNAME') and ENV.include?('SAYBOT_SASL_PASSWORD')
+        c.sasl.username = ENV['SAYBOT_SASL_USERNAME']
+        c.sasl.password = ENV['SAYBOT_SASL_PASSWORD']
+      end
     end
 
     on :message, '.bots' do |m|
