@@ -109,7 +109,8 @@ def main
       end
     end
   end
-  
+
+  bot.loggers.level = :info
   bot.start
 end
 
