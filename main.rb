@@ -18,9 +18,9 @@ CMD_REGEX = Regexp.new(/^\.say (-v (\S+) )?(.*)$/).freeze
 def make_speech_sample(text, voice='whisper')
   outfile = Tempfile.new(['saybot', '.aiff'])
 
-  IO.popen(['say', '-f', '-', '-o', outfile.path, "-v#{voice}"], 'w') do |p|
+  p = IO.popen(['say', '-f-', "-o#{outfile.path}", "-v#{voice}"], 'w') do |p|
     p.puts text
-    p.close_write
+    p.close
   end
 
   return outfile
@@ -41,11 +41,9 @@ def pomf(infile)
     'files[]' => [HTTP::FormData::File.new(infile)]
   })
   response = response.to_s
-  response = JSON.parse(response)
+  response = JSON.parse(response.to_s)
 
-  if !response['success']
-    raise response
-  end
+  raise response unless response['success']
 
   return response['files'][0]['url']
 end
@@ -54,8 +52,8 @@ def main
   bot = Cinch::Bot.new do
     configure do |c|
       c.nick = ENV['SAYBOT_NICK']
-      c.realname = ENV['SAYBOT_REALNAME']
       c.user = ENV['SAYBOT_USER']
+      c.realname = ENV['SAYBOT_REALNAME']
 
       c.server = ENV['SAYBOT_HOST']
       c.port = ENV['SAYBOT_PORT']
