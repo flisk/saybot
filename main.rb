@@ -73,7 +73,7 @@ def main
 
       c.server = ENV['SAYBOT_HOST']
       c.port = ENV['SAYBOT_PORT']
-      c.password = ENV['SAYBOT_PASSWORD']
+      c.password = ENV['SAYBOT_PASSWORD'] if ENV.include?('SAYBOT_PASSWORD')
       c.channels = ENV['SAYBOT_CHANNELS'].split(' ')
       c.ssl.use = ENV['SAYBOT_SSL'].downcase == 'true'
 
