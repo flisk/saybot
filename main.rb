@@ -18,7 +18,7 @@ CMD_REGEX = Regexp.new(/^\.say (-v (\S+) )?(.*)$/).freeze
 def make_speech_sample(text, voice='whisper')
   outfile = Tempfile.new(['saybot', '.aiff'])
 
-  p = IO.popen(['say', '-f-', "-o#{outfile.path}", "-v#{voice}"], 'w') do |p|
+  IO.popen(['say', '-f-', "-o#{outfile.path}", "-v#{voice}"], 'w') do |p|
     p.puts text
     p.close
   end
