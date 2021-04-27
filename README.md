@@ -21,24 +21,7 @@ $ nix-shell -p ruby ffmpeg --command "bundle install && bundle exec ruby main.rb
 
 `.say -v bells Ding dong, ding dong.`
 
-## Voices
-
-Here's a short (non-exhaustive) reference of available voices:
-
-* albert
-* bahh
-* bells
-* boing
-* bubbles
-* cellos
-* deranged
-* hysterical
-* trinoids
-* whisper
-* zarvox
-
-These are basically almost all the novelty voices available. Others may also
-work.
+A list of voices is available [here](https://gist.github.com/mculp/4b95752e25c456d425c6).
 
 ## Copyright
 
