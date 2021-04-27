@@ -92,21 +92,22 @@ def main
     end
   
     on :message, /^.say / do |m|
-      if match = CMD_REGEX.match(m.message)
-        voice = match[2] || 'whisper'
-        text = match[3]
+      match = CMD_REGEX.match(m.message)
+      return unless match
 
-        aiff = make_speech_sample(text, voice)
-        ogg = convert_to_ogg(aiff)
-        aiff.close
-        aiff.unlink
+      voice = match[2] || 'whisper'
+      text = match[3]
 
-        url = pomf(ogg)
-        ogg.close
-        ogg.unlink
+      aiff = make_speech_sample(text, voice)
+      ogg = convert_to_ogg(aiff)
+      aiff.close
+      aiff.unlink
 
-        m.target.notice("#{m.user.nick}: #{url}")
-      end
+      url = pomf(ogg)
+      ogg.close
+      ogg.unlink
+
+      m.target.notice("#{m.user.nick}: #{url}")
     end
   end
 
