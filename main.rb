@@ -93,7 +93,7 @@ def main
   
     on :message, /^.say / do |m|
       match = CMD_REGEX.match(m.message)
-      return unless match
+      next unless match
 
       voice = match[2] || 'whisper'
       text = match[3]
