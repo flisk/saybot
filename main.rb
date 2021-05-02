@@ -98,6 +98,8 @@ def main
       voice = match[2] || 'whisper'
       text = match[3]
 
+      next if text.strip.empty?
+
       aiff = make_speech_sample(text, voice)
       ogg = convert_to_ogg(aiff)
       aiff.close
